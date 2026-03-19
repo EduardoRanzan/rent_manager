@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rent_manager/models/bottom_navigation_bar_item_model.dart';
+import 'package:rent_manager/models/home/bottom_navigation_bar_item_model.dart';
 import 'package:rent_manager/views/dashboard/dashboard_page.dart';
 import 'package:rent_manager/views/profile/profile_page.dart';
 import 'package:rent_manager/widgets/bottom_navigation_bar_widget.dart';
