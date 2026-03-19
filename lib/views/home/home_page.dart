@@ -21,7 +21,8 @@ class _HomePageState extends State<HomePage> {
     BottomNavigationBarItemModel(
       page: DashboardPage(),
       item: BottomNavigationBarItem(
-        icon: Icon(Icons.dashboard),
+        icon: Icon(Icons.dashboard_outlined),
+        activeIcon: Icon(Icons.dashboard),
         label: 'Dashboard',
       ),
       index: 0
@@ -29,7 +30,8 @@ class _HomePageState extends State<HomePage> {
     BottomNavigationBarItemModel(
       page: ProfilePage(),
       item: BottomNavigationBarItem(
-        icon: Icon(Icons.person),
+        icon: Icon(Icons.person_outline),
+        activeIcon: Icon(Icons.person),
         label: 'Perfil',
       ),
       index: 1,
@@ -54,7 +56,6 @@ class _HomePageState extends State<HomePage> {
       ),
       appBar: AppBar(),
       drawer: DrawerWidget(
-
       ),
     );
   }

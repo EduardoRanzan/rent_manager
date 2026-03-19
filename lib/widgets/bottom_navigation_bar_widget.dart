@@ -18,6 +18,21 @@ class BottomNavigationBarWidget extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: onTap,
       items: items,
+      type: BottomNavigationBarType.fixed,
+
+      selectedItemColor: Theme.of(context).colorScheme.primary,
+      showSelectedLabels: false,
+      selectedIconTheme: IconThemeData(
+        color: Theme.of(context).colorScheme.primary,
+        size: 35
+      ),
+
+      unselectedItemColor: Colors.grey,
+      showUnselectedLabels: false,
+      unselectedIconTheme: IconThemeData(
+        color: Colors.grey,
+        size: 30
+      ),
     );
   }
 }
