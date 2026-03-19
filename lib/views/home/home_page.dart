@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rent_manager/models/bottom_navigation_bar_item_model.dart';
 import 'package:rent_manager/views/dashboard/dashboard_page.dart';
+import 'package:rent_manager/views/profile/profile_page.dart';
 import 'package:rent_manager/widgets/bottom_navigation_bar_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,9 +20,18 @@ class _HomePageState extends State<HomePage> {
     BottomNavigationBarItemModel(
       page: DashboardPage(),
       item: BottomNavigationBarItem(
-        icon: Icon(Icons.home)
+        icon: Icon(Icons.dashboard),
+        label: 'Dashboard',
       ),
       index: 0
+    ),
+    BottomNavigationBarItemModel(
+      page: ProfilePage(),
+      item: BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: 'Perfil',
+      ),
+      index: 1,
     ),
   ];
 
@@ -41,21 +51,31 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         items: itemModel.map((item) => item.item).toList(),
       ),
+      appBar: AppBar(),
+      drawer: Drawer(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(10),
+          child: ListView(
+            children: [
+              _buildTitle('Home', '/home'),
+              _buildDivider(),
+            ],
+          ),
+        )
+      ),
     );
   }
 
-  Widget _home() {
-    return Scaffold(
-      body: _buildBody(),
-    );
+  Widget _buildDivider() {
+    return Divider();
   }
 
-  Widget _buildBody() {
-    return Padding(
-      padding: EdgeInsetsGeometry.all(10),
-      child: Text('Home'),
+  Widget _buildTitle(String title, String route) {
+    return ListTile(
+      title: Text(title),
+      onTap: () {
+        Navigator.of(context).pushNamed(route);
+      },
     );
   }
-
-
 }
