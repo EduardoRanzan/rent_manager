@@ -4,6 +4,7 @@ import 'package:rent_manager/models/expenses/expenses_model.dart';
 import 'package:rent_manager/models/expenses/expenses_type_model.dart';
 import 'package:rent_manager/models/properties/properties_model.dart';
 import 'package:rent_manager/models/properties/properties_type_model.dart';
+import 'package:rent_manager/views/expenses/expenses_item_page.dart';
 import 'package:rent_manager/views/expenses/expenses_page.dart';
 import 'package:rent_manager/views/properties/properties_item_page.dart';
 import 'package:rent_manager/views/properties/properties_page.dart';
@@ -234,39 +235,7 @@ class _DashboardPageState extends State<DashboardPage> {
             const SizedBox(height: 10),
 
             ...expenses.map((expense) {
-              return Card(
-                margin: const EdgeInsets.only(bottom: 10),
-                color: expense.type.color.withOpacity(0.2),
-                elevation: 0,
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(12),
-
-                  leading: CircleAvatar(
-                    backgroundColor: theme.colorScheme.surface,
-                    child: expense.type.icon,
-                  ),
-
-                  title: Text(
-                    expense.name,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  subtitle: Text(
-                    DateFormat('dd/MM').format(expense.date),
-                    style: theme.textTheme.bodySmall,
-                  ),
-
-                  trailing: Text(
-                    currency.format(expense.value),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: expense.type.color,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              );
+              return ExpensesItemPage(expense: expense, theme: theme, currency: currency);
             }),
           ],
         ),

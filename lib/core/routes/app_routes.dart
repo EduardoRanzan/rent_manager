@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:rent_manager/views/dashboard/dashboard_page.dart';
 import 'package:rent_manager/views/expenses/expenses_page.dart';
 import 'package:rent_manager/views/home/home_page.dart';
+import 'package:rent_manager/views/login/login_page.dart';
 import 'package:rent_manager/views/profile/profile_page.dart';
 import 'package:rent_manager/views/properties/properties_page.dart';
 import 'package:rent_manager/views/reports/report_page.dart';
@@ -15,6 +16,7 @@ class AppRoutes {
       '/properties': (context) => PropertiesPage(),
       '/report': (context) => ReportPage(),
       '/profile': (context) => ProfilePage(),
+      '/login': (context) => LoginPage(),
     };
   }
 }
