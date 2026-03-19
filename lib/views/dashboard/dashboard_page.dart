@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:rent_manager/models/expenses/expenses_model.dart';
+import 'package:rent_manager/models/expenses/expenses_type_model.dart';
+import 'package:rent_manager/views/expenses/expenses_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -137,6 +141,39 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildExpensesCard(ThemeData theme) {
+    final currency = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+    final expenses = [
+      ExpensesModel(
+        id: '1',
+        name: 'Luz',
+        type: ExpensesTypeModel(
+          id: '1',
+          icon: Icon(Icons.flash_on, color: Colors.yellow),
+          name: 'Energia',
+          color: Colors.yellow,
+        ),
+        value: 100,
+        date: DateTime.now(),
+        deadline: DateTime.now(),
+        propertieId: '',
+      ),
+      ExpensesModel(
+        id: '2',
+        name: 'Água',
+        type: ExpensesTypeModel(
+          id: '2',
+          icon: Icon(Icons.water_drop, color: Colors.blue),
+          name: 'Água',
+          color: Colors.blue,
+        ),
+        value: 80,
+        date: DateTime.now(),
+        deadline: DateTime.now(),
+        propertieId: '',
+      ),
+    ];
+
     return Card(
       elevation: 4,
       color: theme.colorScheme.tertiaryContainer,
@@ -146,31 +183,56 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                'Despesas',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(ExpensesPage.routeName);
+                },
+                child: Text(
+                  'Despesas',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(
-                Icons.build,
-                color: theme.colorScheme.primary,
-              ),
-              title: const Text('Manutenção'),
-              trailing: const Text('R\$ 1.200'),
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(
-                Icons.lightbulb,
-                color: theme.colorScheme.tertiary,
-              ),
-              title: const Text('Energia'),
-              trailing: const Text('R\$ 800'),
-            ),
+
+            const SizedBox(height: 10),
+
+            ...expenses.map((expense) {
+              return Card(
+                margin: const EdgeInsets.only(bottom: 10),
+                color: expense.type.color.withOpacity(0.2),
+                elevation: 0,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(12),
+
+                  leading: CircleAvatar(
+                    backgroundColor: theme.colorScheme.surface,
+                    child: expense.type.icon,
+                  ),
+
+                  title: Text(
+                    expense.name,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  subtitle: Text(
+                    DateFormat('dd/MM').format(expense.date),
+                    style: theme.textTheme.bodySmall,
+                  ),
+
+                  trailing: Text(
+                    currency.format(expense.value),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: expense.type.color,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              );
+            }),
           ],
         ),
       ),
