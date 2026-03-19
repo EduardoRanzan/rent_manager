@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static ThemeData initTheme() {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: Colors.teal,
+      seedColor: Colors.indigo,
       brightness: Brightness.dark,
     );
 

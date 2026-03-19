@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rent_manager/models/expenses/expenses_model.dart';
 import 'package:rent_manager/models/expenses/expenses_type_model.dart';
+import 'package:rent_manager/models/properties/properties_model.dart';
+import 'package:rent_manager/models/properties/properties_type_model.dart';
 import 'package:rent_manager/views/expenses/expenses_page.dart';
+import 'package:rent_manager/views/properties/properties_item_page.dart';
+import 'package:rent_manager/views/properties/properties_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -25,7 +29,7 @@ class _DashboardPageState extends State<DashboardPage> {
           spacing: 15,
           children: [
             _buildFinanceCard(theme),
-            _buildTopProperties(theme),
+            _buildPropertiesCard(theme),
             _buildExpensesCard(theme),
           ],
         ),
@@ -35,8 +39,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildFinanceCard(ThemeData theme) {
     return Card(
-      elevation: 4,
-      color: theme.colorScheme.primaryContainer,
+      color: Colors.white70.withOpacity(0.1),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
@@ -88,51 +91,84 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildTopProperties(ThemeData theme) {
-    final properties = [
-      {'name': 'Casa A', 'value': 'R\$ 4.000'},
-      {'name': 'Ap 202', 'value': 'R\$ 3.200'},
-      {'name': 'Studio Centro', 'value': 'R\$ 2.800'},
+  Widget _buildPropertiesCard(ThemeData theme) {
+
+    final List<PropertiesModel> properties = [
+      PropertiesModel(
+        id: '1',
+        name: 'Casa Centro',
+        rentPrice: 2500,
+        latitude: 0,
+        longitude: 0,
+        isRented: true,
+        description: 'Casa com 3 quartos',
+        images: [],
+        type: PropertiesTypeModel(
+          id: '1',
+          name: 'Casa',
+          icon: const Icon(Icons.home, color: Colors.blue),
+          color: Colors.blue,
+        ),
+      ),
+      PropertiesModel(
+        id: '2',
+        name: 'Ap 202',
+        rentPrice: 1800,
+        latitude: 0,
+        longitude: 0,
+        isRented: false,
+        description: 'Apartamento compacto',
+        images: [],
+        type: PropertiesTypeModel(
+          id: '1',
+          name: 'Apartamento',
+          icon: const Icon(Icons.apartment_outlined, color: Colors.red),
+          color: Colors.red,
+        ),
+      ),
+      PropertiesModel(
+        id: '3',
+        name: 'Sala Comercial',
+        rentPrice: 5000,
+        latitude: 0,
+        longitude: 0,
+        isRented: false,
+        description: 'Suuuuper sala comercial',
+        images: [],
+        type: PropertiesTypeModel(
+          id: '1',
+          name: 'Sala comercial',
+          icon: const Icon(Icons.add_business, color: Colors.orange),
+          color: Colors.orange,
+        ),
+      ),
     ];
 
     return Card(
-      elevation: 4,
-      color: theme.colorScheme.secondaryContainer,
+      color: Colors.white70.withOpacity(0.1),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                'Imóveis',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            ...properties.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-
-              return ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  backgroundColor: theme.colorScheme.onSecondaryContainer,
-                  child: Text(
-                    '${index + 1}',
-                    style: TextStyle(
-                      color: theme.colorScheme.secondaryContainer,
-                      fontWeight: FontWeight.bold,
-                    ),
+              child: InkWell(
+                child: Text(
+                  'Imóveis',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                title: Text(item['name']!),
-                trailing: Text(
-                  item['value']!,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              );
+                onTap: () {
+                  Navigator.of(context).pushNamed(PropertiesPage.routeName);
+                },
+              )
+            ),
+
+            const SizedBox(height: 12),
+
+            ...properties.map((property) {
+              return PropertiesItemPage(property: property);
             }),
           ],
         ),
@@ -175,8 +211,7 @@ class _DashboardPageState extends State<DashboardPage> {
     ];
 
     return Card(
-      elevation: 4,
-      color: theme.colorScheme.tertiaryContainer,
+      color: Colors.white70.withOpacity(0.1),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

@@ -17,6 +17,7 @@ class RentManagerApp extends StatelessWidget {
       theme: AppTheme.initTheme(),
       routes: AppRoutes.initRoutes(),
       initialRoute: HomePage.routeName,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
