@@ -29,3 +29,6 @@ doc/api/
 # android studio
 
 .idea
+
+.fvm
+.fvmrc
