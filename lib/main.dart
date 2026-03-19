@@ -13,7 +13,7 @@ class RentManagerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Rent Manager',
       theme: AppTheme.initTheme(),
       routes: AppRoutes.initRoutes(),
       initialRoute: HomePage.routeName,

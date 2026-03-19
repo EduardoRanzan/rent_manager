@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class DashboardPage extends StatefulWidget{
   const DashboardPage({super.key});
 
+  static String routeName = '/dashboard';
+
   @override
   State<StatefulWidget> createState() => _DashboardPageState();
 }
