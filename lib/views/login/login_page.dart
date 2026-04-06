@@ -24,48 +24,29 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            spacing: 10,
             children: [
               const SizedBox(height: 60),
-              Card(
-                color: theme.colorScheme.primaryContainer,
+              SizedBox(
+                height: 200,
                 child: Padding(
                   padding: EdgeInsetsGeometry.all(15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 15,
-                    children: [
-                      const Icon(
-                        Icons.home_work,
-                        size: 48,
-                        color: Colors.white,
-                      ),
-                      const Text(
-                        'Rent Manager',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: Image.asset('assets/images/logo.png')
                 ),
               ),
-              const SizedBox(height: 20),
               Text(
                 'Bem-vindo!',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8),
               Text(
                 'Faça login para continuar',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[400],
                 ),
               ),
-              const SizedBox(height: 40),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -76,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
               TextFormField(
                 controller: _passwordController,
                 obscureText: _hidePassword,
@@ -98,8 +78,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
-
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

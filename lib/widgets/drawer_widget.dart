@@ -63,25 +63,9 @@ class DrawerWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.primaryContainer,
       ),
-      child: SafeArea(child:
-        Row(
-          spacing: 15,
-          children: [
-            const Icon(
-              Icons.home_work,
-              size: 48,
-              color: Colors.white,
-            ),
-            const Text(
-              'Rent Manager',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
+      child: SizedBox(
+        height: 100,
+        child: Image.asset('assets/images/logo.png'),
       )
     );
   }
