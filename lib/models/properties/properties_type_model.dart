@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
 
+part 'properties_type_model.g.dart';
+
+@collection
 class PropertiesTypeModel {
-  final String id;
-  final String name;
-  final Icon icon;
-  final Color color;
+  Id id = 0;
 
-  PropertiesTypeModel({
-    required this.id,
-    required this.name,
-    required this.icon,
-    required this.color,
-  });
+  late String name;
+
+  late int iconCode;
+
+  late int colorValue;
 }

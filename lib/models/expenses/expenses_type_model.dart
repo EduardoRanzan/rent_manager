@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
 
+part 'expenses_type_model.g.dart';
+
+@collection
 class ExpensesTypeModel {
-  final String id;
-  final Icon icon;
-  final String name;
-  final Color color;
+  Id id = 0;
 
-  ExpensesTypeModel({
-    required this.id,
-    required this.icon,
-    required this.name,
-    required this.color,
-  });
+  late String name;
+
+  late int iconCode;
+
+  late int colorValue;
 }

@@ -1,25 +1,24 @@
-import 'package:rent_manager/models/properties/properties_type_model.dart';
+import 'package:isar/isar.dart';
 
+part 'properties_model.g.dart';
+
+@collection
 class PropertiesModel {
-  final String id;
-  final String name;
-  final double rentPrice;
-  final double latitude;
-  final double longitude;
-  final bool isRented;
-  final String? description;
-  final List<String>? images;
-  final PropertiesTypeModel type;
+  Id id = 0;
 
-  PropertiesModel({
-    required this.id,
-    required this.name,
-    required this.rentPrice,
-    required this.latitude,
-    required this.longitude,
-    required this.isRented,
-    this.description,
-    this.images,
-    required this.type,
-  });
+  late String name;
+
+  late double rentPrice;
+
+  late double latitude;
+
+  late double longitude;
+
+  late bool isRented;
+
+  String? description;
+
+  List<String>? images;
+
+  late int propertiesTypeId;
 }

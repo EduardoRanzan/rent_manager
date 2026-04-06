@@ -32,3 +32,5 @@ doc/api/
 
 .fvm
 .fvmrc
+
+*.g.dart

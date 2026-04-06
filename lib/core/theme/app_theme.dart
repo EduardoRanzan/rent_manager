@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rent_manager/core/theme/input_theme.dart';
 
 class AppTheme {
   static ThemeData initTheme() {
@@ -8,7 +9,8 @@ class AppTheme {
     );
 
     return ThemeData(
-      colorScheme: colorScheme
+      colorScheme: colorScheme,
+      inputDecorationTheme: InputTheme().initTheme(),
     );
   }
 }

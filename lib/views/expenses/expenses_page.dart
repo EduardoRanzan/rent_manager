@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rent_manager/database/repositories/expenses/expenses_repository.dart';
 import 'package:rent_manager/models/expenses/expenses_model.dart';
 import 'package:rent_manager/models/expenses/expenses_type_model.dart';
+import 'package:rent_manager/views/expenses/expenses_form_page.dart';
 import 'package:rent_manager/views/expenses/expenses_item_page.dart';
 
 class ExpensesPage extends StatefulWidget {
@@ -14,10 +16,13 @@ class ExpensesPage extends StatefulWidget {
 }
 
 class _ExpensesPageState extends State<ExpensesPage> {
-  final List<ExpensesModel> expenses = [
-    ExpensesModel(id: '1', name: 'Luz', type: ExpensesTypeModel(id: '1', icon: Icon(Icons.flash_on, color: Colors.yellow,), name: 'Energia', color: Colors.yellow), value: 100, date: DateTime.now(), deadline: DateTime.now(), propertieId: ''),
-    ExpensesModel(id: '1', name: 'Água', type: ExpensesTypeModel(id: '1', icon: Icon(Icons.water_drop, color: Colors.blue,), name: 'Água', color: Colors.blue), value: 100, date: DateTime.now(), deadline: DateTime.now(), propertieId: ''),
-  ];
+  late List<ExpensesModel> expenses = [];
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
     final currency = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: Text('Despesas'),),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: expenses.length,
@@ -37,12 +42,25 @@ class _ExpensesPageState extends State<ExpensesPage> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: _newExpense,
         backgroundColor: theme.colorScheme.primaryContainer,
         child: Icon(
           Icons.add,
           color: theme.colorScheme.onPrimaryContainer,
         ),
+      ),
+    );
+  }
+
+  Future<void> _init() async {
+    expenses = await ExpensesRepository().getAll();
+    setState(() {});
+  }
+
+  void _newExpense({ExpensesModel? expenses}) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ExpensesFormPage(expense: expenses),
       ),
     );
   }

@@ -18,7 +18,7 @@ class PropertiesItemPage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: property.type.color.withOpacity(0.12),
+        color: theme.colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -33,7 +33,7 @@ class PropertiesItemPage extends StatelessWidget {
             property.isRented
                 ? Icons.home
                 : Icons.home_outlined,
-            color: property.type.color,
+            color: theme.colorScheme.primary,
           ),
         ),
 
@@ -71,7 +71,7 @@ class PropertiesItemPage extends StatelessWidget {
         trailing: Text(
           currency.format(property.rentPrice),
           style: TextStyle(
-            color: property.type.color,
+            color: theme.colorScheme.primaryContainer,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -94,56 +94,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildPropertiesCard(ThemeData theme) {
 
-    final List<PropertiesModel> properties = [
-      PropertiesModel(
-        id: '1',
-        name: 'Casa Centro',
-        rentPrice: 2500,
-        latitude: 0,
-        longitude: 0,
-        isRented: true,
-        description: 'Casa com 3 quartos',
-        images: [],
-        type: PropertiesTypeModel(
-          id: '1',
-          name: 'Casa',
-          icon: const Icon(Icons.home, color: Colors.blue),
-          color: Colors.blue,
-        ),
-      ),
-      PropertiesModel(
-        id: '2',
-        name: 'Ap 202',
-        rentPrice: 1800,
-        latitude: 0,
-        longitude: 0,
-        isRented: false,
-        description: 'Apartamento compacto',
-        images: [],
-        type: PropertiesTypeModel(
-          id: '1',
-          name: 'Apartamento',
-          icon: const Icon(Icons.apartment_outlined, color: Colors.red),
-          color: Colors.red,
-        ),
-      ),
-      PropertiesModel(
-        id: '3',
-        name: 'Sala Comercial',
-        rentPrice: 5000,
-        latitude: 0,
-        longitude: 0,
-        isRented: false,
-        description: 'Suuuuper sala comercial',
-        images: [],
-        type: PropertiesTypeModel(
-          id: '1',
-          name: 'Sala comercial',
-          icon: const Icon(Icons.add_business, color: Colors.orange),
-          color: Colors.orange,
-        ),
-      ),
-    ];
+    final List<PropertiesModel> properties = [];
 
     return Card(
       color: Colors.white70.withOpacity(0.1),
@@ -180,36 +131,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildExpensesCard(ThemeData theme) {
     final currency = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
-    final expenses = [
-      ExpensesModel(
-        id: '1',
-        name: 'Luz',
-        type: ExpensesTypeModel(
-          id: '1',
-          icon: Icon(Icons.flash_on, color: Colors.yellow),
-          name: 'Energia',
-          color: Colors.yellow,
-        ),
-        value: 100,
-        date: DateTime.now(),
-        deadline: DateTime.now(),
-        propertieId: '',
-      ),
-      ExpensesModel(
-        id: '2',
-        name: 'Água',
-        type: ExpensesTypeModel(
-          id: '2',
-          icon: Icon(Icons.water_drop, color: Colors.blue),
-          name: 'Água',
-          color: Colors.blue,
-        ),
-        value: 80,
-        date: DateTime.now(),
-        deadline: DateTime.now(),
-        propertieId: '',
-      ),
-    ];
+    final expenses = [];
 
     return Card(
       color: Colors.white70.withOpacity(0.1),

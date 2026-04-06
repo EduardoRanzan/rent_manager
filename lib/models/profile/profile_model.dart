@@ -1,21 +1,22 @@
-class ProfileModel {
-  final String id;
-  final String name;
-  final String fone;
-  final String address;
-  final String email;
-  final DateTime birthDate;
-  final String password;
-  final String? image;
+import 'package:isar/isar.dart';
 
-  ProfileModel({
-    required this.id,
-    required this.name,
-    required this.fone,
-    required this.address,
-    required this.email,
-    required this.birthDate,
-    required this.password,
-    this.image
-  });
+part 'profile_model.g.dart';
+
+@collection
+class ProfileModel {
+  Id id = Isar.autoIncrement;
+
+  late String name;
+
+  late String fone;
+
+  late String address;
+
+  late String email;
+
+  late DateTime birthDate;
+
+  late String password;
+
+  late String? image;
 }

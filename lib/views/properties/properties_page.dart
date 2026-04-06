@@ -14,56 +14,7 @@ class PropertiesPage extends StatefulWidget {
 }
 
 class _PropertiesPageState extends State<PropertiesPage> {
-  final List<PropertiesModel> properties = [
-    PropertiesModel(
-      id: '1',
-      name: 'Casa Centro',
-      rentPrice: 2500,
-      latitude: 0,
-      longitude: 0,
-      isRented: true,
-      description: 'Casa com 3 quartos',
-      images: [],
-      type: PropertiesTypeModel(
-        id: '1',
-        name: 'Casa',
-        icon: Icon(Icons.home, color: Colors.blue),
-        color: Colors.blue,
-      ),
-    ),
-    PropertiesModel(
-      id: '2',
-      name: 'Ap 202',
-      rentPrice: 1800,
-      latitude: 0,
-      longitude: 0,
-      isRented: false,
-      description: 'Apartamento compacto',
-      images: [],
-      type: PropertiesTypeModel(
-        id: '1',
-        name: 'Apartamento',
-        icon: Icon(Icons.apartment_outlined, color: Colors.red),
-        color: Colors.red,
-      ),
-    ),
-    PropertiesModel(
-      id: '3',
-      name: 'Sala Comercial',
-      rentPrice: 5000,
-      latitude: 0,
-      longitude: 0,
-      isRented: false,
-      description: 'Suuuuper sala comercial',
-      images: [],
-      type: PropertiesTypeModel(
-        id: '1',
-        name: 'Sala comercial',
-        icon: Icon(Icons.add_business, color: Colors.orange),
-        color: Colors.orange,
-      ),
-    ),
-  ];
+  final List<PropertiesModel> properties = [];
 
   @override
   Widget build(BuildContext context) {

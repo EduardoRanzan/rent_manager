@@ -16,15 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final ProfileModel profile = ProfileModel(
-      id: '1',
-      name: 'Eduardo Ranzan',
-      fone: '+55 49 99999-999',
-      address: 'Rua Lindeiros, Bairro tal numero tal',
-      email: 'email@eduardo.com',
-      birthDate: DateTime.now(),
-      password: 'senha',
-    );
+    final ProfileModel profile = ProfileModel();
 
     return Scaffold(
       body: SafeArea(

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rent_manager/core/routes/app_routes.dart';
 import 'package:rent_manager/core/theme/app_theme.dart';
+import 'package:rent_manager/database/isar_service.dart';
 import 'package:rent_manager/views/home/home_page.dart';
 import 'package:rent_manager/views/login/login_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await IsarService.init();
+
   runApp(const RentManagerApp());
 }
 
