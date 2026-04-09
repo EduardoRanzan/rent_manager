@@ -4,7 +4,7 @@ import 'package:rent_manager/core/theme/input_theme.dart';
 class AppTheme {
   static ThemeData initTheme() {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: Colors.amberAccent,
+      seedColor: Colors.teal,
       brightness: Brightness.dark,
     );
 

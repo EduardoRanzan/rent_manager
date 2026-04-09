@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rent_manager/models/home/bottom_navigation_bar_item_model.dart';
 import 'package:rent_manager/views/dashboard/dashboard_page.dart';
 import 'package:rent_manager/views/profile/profile_page.dart';
+import 'package:rent_manager/views/reports/report_page.dart';
 import 'package:rent_manager/widgets/bottom_navigation_bar_widget.dart';
 import 'package:rent_manager/widgets/drawer_widget.dart';
 
@@ -28,11 +29,11 @@ class _HomePageState extends State<HomePage> {
       index: 0
     ),
     BottomNavigationBarItemModel(
-      page: ProfilePage(),
+      page: ReportPage(),
       item: BottomNavigationBarItem(
-        icon: Icon(Icons.person_outline),
-        activeIcon: Icon(Icons.person),
-        label: 'Perfil',
+        icon: Icon(Icons.bar_chart_outlined),
+        activeIcon: Icon(Icons.bar_chart),
+        label: 'Relatórios',
       ),
       index: 1,
     ),

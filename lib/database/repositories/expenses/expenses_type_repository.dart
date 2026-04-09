@@ -11,11 +11,17 @@ class ExpensesTypeRepository {
     });
   }
 
-  Future<ExpensesTypeModel?> getById(int id) {
-    return isar.expensesTypeModels.get(id);
+  Future<void> delete(int id) async {
+    await isar.writeTxn(() async {
+      await isar.expensesTypeModels.delete(id);
+    });
   }
 
   Future<List<ExpensesTypeModel>> getAll() {
     return isar.expensesTypeModels.where().findAll();
+  }
+
+  Future<ExpensesTypeModel?> getById(int id) {
+    return isar.expensesTypeModels.get(id);
   }
 }

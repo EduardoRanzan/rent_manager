@@ -162,8 +162,10 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           ElevatedButton(onPressed: _goBack, child: const Text('Cancelar')),
-          widget.expense == null ? IconButton(
-            onPressed: _delete,
+          widget.expense != null ? IconButton(
+            onPressed: () {
+              _delete(widget.expense!.id);
+            },
             icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error)
           ) : const SizedBox(),
           FilledButton(
@@ -191,15 +193,21 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
     await _repo.save(expense);
 
     if (mounted) {
-      Navigator.pop(context);
+      _goBack();
     }
   }
 
-  Future<void> _delete() async {
+  Future<void> _delete(int id) async {
+    try {
+      await _repo.delete(id);
 
+      _goBack();
+    } catch(e) {
+      rethrow;
+    }
   }
 
   void _goBack() {
-    Navigator.of(context).pop();
+    Navigator.pop(context, true);
   }
 }

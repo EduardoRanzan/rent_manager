@@ -157,11 +157,15 @@ class _DashboardPageState extends State<DashboardPage> {
             const SizedBox(height: 10),
 
             ...expenses.map((expense) {
-              return ExpensesItemPage(expense: expense, theme: theme, currency: currency);
+              return ExpensesItemPage(expense: expense, theme: theme, currency: currency, onUpdate: _init,);
             }),
           ],
         ),
       ),
     );
+  }
+
+  void _init() {
+
   }
 }

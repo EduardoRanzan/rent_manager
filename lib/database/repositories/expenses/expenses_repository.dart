@@ -5,9 +5,9 @@ import 'package:rent_manager/models/expenses/expenses_model.dart';
 class ExpensesRepository {
   final Isar isar = IsarService.isar;
 
-  Future<void> save(ExpensesModel expense) async {
-    await isar.writeTxn(() async {
-      await isar.expensesModels.put(expense);
+  Future<int> save(ExpensesModel expense) async {
+    return await isar.writeTxn(() async {
+      return await isar.expensesModels.put(expense);
     });
   }
 
@@ -19,5 +19,9 @@ class ExpensesRepository {
 
   Future<List<ExpensesModel>> getAll() async {
     return await isar.expensesModels.where().findAll();
+  }
+
+  Future<ExpensesModel?> getById(int id) async {
+    return await isar.expensesModels.get(id);
   }
 }

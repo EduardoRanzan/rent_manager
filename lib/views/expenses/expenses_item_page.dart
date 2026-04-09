@@ -7,12 +7,14 @@ class ExpensesItemPage extends StatelessWidget {
   final ExpensesModel expense;
   final ThemeData theme;
   final NumberFormat currency;
+  final VoidCallback onUpdate;
 
   const ExpensesItemPage({
     super.key,
     required this.expense,
     required this.theme,
     required this.currency,
+    required this.onUpdate,
   });
 
   @override
@@ -63,11 +65,15 @@ class ExpensesItemPage extends StatelessWidget {
     );
   }
 
-  void _editExpense(BuildContext context, ExpensesModel expense) {
-    Navigator.of(context).push(
+  void _editExpense(BuildContext context, ExpensesModel expense) async {
+    final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ExpensesFormPage(expense: expense),
       ),
     );
+
+    if (result == true) {
+      onUpdate();
+    }
   }
 }

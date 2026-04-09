@@ -37,7 +37,12 @@ class _ExpensesPageState extends State<ExpensesPage> {
         itemBuilder: (context, index) {
           final expense = expenses[index];
 
-          return ExpensesItemPage(expense: expense, theme: theme, currency: currency);
+          return ExpensesItemPage(
+            expense: expense,
+            theme: theme,
+            currency: currency,
+            onUpdate: _init,
+          );
         },
       ),
 
@@ -52,16 +57,21 @@ class _ExpensesPageState extends State<ExpensesPage> {
     );
   }
 
-  Future<void> _init() async {
-    expenses = await ExpensesRepository().getAll();
-    setState(() {});
-  }
-
-  void _newExpense({ExpensesModel? expenses}) {
-    Navigator.of(context).push(
+  void _newExpense({ExpensesModel? expenses}) async {
+    final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ExpensesFormPage(expense: expenses),
       ),
     );
+    if (result == true) {
+      _init();
+    }
+  }
+
+  Future<void> _init() async {
+    final expensesData = await ExpensesRepository().getAll();
+    setState(() {
+      expenses = expensesData;
+    });
   }
 }

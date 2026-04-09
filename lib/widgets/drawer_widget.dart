@@ -15,7 +15,7 @@ class DrawerWidget extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          _buildHeader(theme),
+          _buildHeader(),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(12),
@@ -46,8 +46,8 @@ class DrawerWidget extends StatelessWidget {
                   Icons.bar_chart,
                   ReportPage.routeName,
                 ),
-                _buildGroup('Conta'),
-                _buildProfileItem(context),
+                // _buildGroup('Conta'),
+                // _buildProfileItem(context),
               ],
             ),
           ),
@@ -56,17 +56,9 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(ThemeData theme) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsetsDirectional.all(15),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primaryContainer,
-      ),
-      child: SizedBox(
-        height: 100,
-        child: Image.asset('assets/images/logo.png'),
-      )
+  Widget _buildHeader() {
+    return DrawerHeader(
+      child: Image.asset('assets/images/logo.png'),
     );
   }
 
