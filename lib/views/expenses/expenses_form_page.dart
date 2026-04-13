@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rent_manager/database/repositories/expenses/expenses_repository.dart';
+import 'package:rent_manager/database/repositories/expenses/expenses_type_repository.dart';
 import 'package:rent_manager/models/expenses/expenses_model.dart';
+import 'package:rent_manager/views/expenses/type/expenses_type_form.dart';
 
 class ExpensesFormPage extends StatefulWidget {
   final ExpensesModel? expense;
@@ -22,26 +24,18 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
   DateTime? _date;
   DateTime? _deadline;
   int? _expensesTypeId;
+  late List<dynamic> _expensesTypes;
+
 
   final _repo = ExpensesRepository();
+  final _expensesTypeRepo = ExpensesTypeRepository();
 
   final _dateFormat = DateFormat('dd/MM/yyyy');
 
   @override
   void initState() {
     super.initState();
-
-    if (widget.expense != null) {
-      final e = widget.expense!;
-
-      _nameController.text = e.name;
-      _valueController.text = e.value.toString();
-      _propertyController.text = e.propertyId;
-
-      _date = e.date;
-      _deadline = e.deadline;
-      _expensesTypeId = e.expensesTypeId;
-    }
+    _init();
   }
 
   @override
@@ -73,6 +67,7 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
                 _buildProperty(),
                 _buildDatePicker(),
                 _buildDeadlinePicker(),
+                _buildExpensesType(),
                 const SizedBox(height: 20),
                 _buildButtons(),
               ],
@@ -155,6 +150,36 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
     );
   }
 
+  Widget _buildExpensesType() {
+    return DropdownButtonFormField<int>(
+      value: _expensesTypeId,
+      items: [
+        DropdownMenuItem(
+          value: 0,
+          child: Row(
+            spacing: 5,
+            children: [
+              Icon(Icons.add_circle_outline, color: Theme.of(context).colorScheme.primary),
+              Text('Cadastrar novo', style: TextStyle(color: Theme.of(context).colorScheme.primary),)
+            ],
+          ),
+        ),
+      ],
+      onChanged: (value) {
+        if (value == 0) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ExpensesTypeForm(),
+            ),
+          );
+          return;
+        }
+
+        setState(() => _expensesTypeId = value);
+      },
+    );
+  }
+
   Widget _buildButtons() {
     return SizedBox(
       width: double.infinity,
@@ -209,5 +234,19 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
 
   void _goBack() {
     Navigator.pop(context, true);
+  }
+
+  Future<void> _init() async{
+    _expensesTypes = await _expensesTypeRepo.getAll();
+
+    if (widget.expense != null) {
+      _nameController.text = widget.expense!.name;
+      _valueController.text = widget.expense!.value.toString();
+      _propertyController.text = widget.expense!.propertyId;
+
+      _date = widget.expense!.date;
+      _deadline = widget.expense!.deadline;
+      _expensesTypeId = widget.expense!.expensesTypeId;
+    }
   }
 }
