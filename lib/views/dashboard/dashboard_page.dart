@@ -19,6 +19,8 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  final currency = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -120,7 +122,7 @@ class _DashboardPageState extends State<DashboardPage> {
             const SizedBox(height: 12),
 
             ...properties.map((property) {
-              return PropertiesItemPage(property: property);
+              return PropertiesItemPage(property: property, onUpdate: _init, currency: currency, theme: theme);
             }),
           ],
         ),
@@ -129,8 +131,6 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildExpensesCard(ThemeData theme) {
-    final currency = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-
     final expenses = [];
 
     return Card(

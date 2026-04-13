@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rent_manager/models/properties/properties_model.dart';
+import 'package:rent_manager/views/properties/properties_form_page.dart';
 
 class PropertiesItemPage extends StatelessWidget {
   final PropertiesModel property;
+  final ThemeData theme;
+  final NumberFormat currency;
+  final VoidCallback onUpdate;
 
   const PropertiesItemPage({
     super.key,
     required this.property,
+    required this.theme,
+    required this.currency,
+    required this.onUpdate,
   });
 
   @override
@@ -75,7 +82,18 @@ class PropertiesItemPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        onTap: () => _edit(context, property),
       ),
     );
+  }
+
+  Future<void> _edit(BuildContext context, PropertiesModel property) async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => PropertiesFormPage(property: property,))
+    );
+
+    if (result == true) {
+      onUpdate;
+    }
   }
 }
