@@ -37,9 +37,7 @@ class PropertiesItemPage extends StatelessWidget {
         leading: CircleAvatar(
           backgroundColor: theme.colorScheme.surface,
           child: Icon(
-            property.isRented
-                ? Icons.home
-                : Icons.home_outlined,
+            Icons.apartment_outlined,
             color: theme.colorScheme.primary,
           ),
         ),

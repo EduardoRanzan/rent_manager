@@ -22,6 +22,12 @@ class ExpensesItemPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final property = properties.where(
+          (p) => p.id == expense.propertyId,
+    ).isNotEmpty
+        ? properties.firstWhere((p) => p.id == expense.propertyId)
+        : null;
+
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       color: theme.colorScheme.primaryContainer,
@@ -50,7 +56,7 @@ class ExpensesItemPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  properties.firstWhere((property) => property.id == expense.propertyId).name,
+                  property?.name ?? 'Sem imóvel',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSecondary,
                     fontWeight: FontWeight.bold,

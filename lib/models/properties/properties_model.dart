@@ -4,15 +4,15 @@ part 'properties_model.g.dart';
 
 @collection
 class PropertiesModel {
-  Id id = 0;
+  Id id = Isar.autoIncrement;
 
   late String name;
 
   late double rentPrice;
 
-  late double latitude;
+  late double? latitude;
 
-  late double longitude;
+  late double? longitude;
 
   late bool isRented;
 
@@ -20,5 +20,5 @@ class PropertiesModel {
 
   List<String>? images;
 
-  late int propertiesTypeId;
+  int? propertiesTypeId;
 }

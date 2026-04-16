@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rent_manager/database/repositories/expenses/expenses_repository.dart';
+import 'package:rent_manager/database/repositories/properties/properties_repository.dart';
 import 'package:rent_manager/models/expenses/expenses_model.dart';
 import 'package:rent_manager/models/expenses/expenses_type_model.dart';
 import 'package:rent_manager/models/properties/properties_model.dart';
@@ -20,6 +22,18 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   final currency = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+  final _repoExpenses = ExpensesRepository();
+  final _repoProperties = PropertiesRepository();
+
+  List<ExpensesModel> expenses = [];
+  List<PropertiesModel> properties = [];
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +56,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildFinanceCard(ThemeData theme) {
     return Card(
-      color: Colors.white70.withOpacity(0.1),
+      color: theme.colorScheme.surfaceBright,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
@@ -56,7 +70,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             _financeItem(
               theme,
-              'Recebido',
+              'A Pagar',
               'R\$ 12.000',
               theme.colorScheme.primary,
             ),
@@ -95,11 +109,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildPropertiesCard(ThemeData theme) {
-
-    final List<PropertiesModel> properties = [];
-
-    return Card(
-      color: Colors.white70.withOpacity(0.1),
+   return Card(
+      color: theme.colorScheme.surfaceBright,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -131,10 +142,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildExpensesCard(ThemeData theme) {
-    final expenses = [];
-
     return Card(
-      color: Colors.white70.withOpacity(0.1),
+      color: theme.colorScheme.surfaceBright,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -157,7 +166,15 @@ class _DashboardPageState extends State<DashboardPage> {
             const SizedBox(height: 10),
 
             ...expenses.map((expense) {
-              return ExpensesItemPage(expense: expense, theme: theme, currency: currency, onUpdate: _init,);
+              return ExpensesItemPage(
+                expense: expense,
+                theme: theme,
+                currency: currency,
+                onUpdate: () {
+                  _init();
+                },
+                properties: properties,
+              );
             }),
           ],
         ),
@@ -165,7 +182,13 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  void _init() {
+  Future<void> _init() async {
+    final expensesData = await _repoExpenses.getAll();
+    final propertiesData = await _repoProperties.getAll();
 
+    setState(() {
+      expenses = expensesData;
+      properties = propertiesData;
+    });
   }
 }
