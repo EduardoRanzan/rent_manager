@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rent_manager/database/repositories/expenses/expenses_repository.dart';
 import 'package:rent_manager/database/repositories/expenses/expenses_type_repository.dart';
+import 'package:rent_manager/database/repositories/properties/properties_repository.dart';
 import 'package:rent_manager/models/expenses/expenses_model.dart';
+import 'package:rent_manager/models/properties/properties_model.dart';
 import 'package:rent_manager/views/expenses/type/expenses_type_form.dart';
 
 class ExpensesFormPage extends StatefulWidget {
@@ -16,19 +18,19 @@ class ExpensesFormPage extends StatefulWidget {
 
 class _ExpensesFormPageState extends State<ExpensesFormPage> {
   final _formKey = GlobalKey<FormState>();
+  late final theme = Theme.of(context).colorScheme;
 
   final _nameController = TextEditingController();
   final _valueController = TextEditingController();
-  final _propertyController = TextEditingController();
+
+  List<PropertiesModel>? properties;
 
   DateTime? _date;
   DateTime? _deadline;
-  int? _expensesTypeId;
-  late List<dynamic> _expensesTypes;
-
+  late int _propertyId = 0;
 
   final _repo = ExpensesRepository();
-  final _expensesTypeRepo = ExpensesTypeRepository();
+  final _repoProperties = PropertiesRepository();
 
   final _dateFormat = DateFormat('dd/MM/yyyy');
 
@@ -42,7 +44,6 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
   void dispose() {
     _nameController.dispose();
     _valueController.dispose();
-    _propertyController.dispose();
     super.dispose();
   }
 
@@ -52,27 +53,51 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Editar Despesa' : 'Nova Despesa'),
+        title: Row(
+          children: [
+            Text(isEditing ? 'Editar Despesa' : 'Nova Despesa'),
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: theme.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                _dateFormat.format(_date!),
+                style: TextStyle(
+                  color: theme.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12
+                ),
+              ),
+            ),
+          ],
+        )
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              spacing: 10,
-              children: [
-                _buildName(),
-                _buildValue(),
-                _buildProperty(),
-                _buildDatePicker(),
-                _buildDeadlinePicker(),
-                _buildExpensesType(),
-                const SizedBox(height: 20),
-                _buildButtons(),
-              ],
+          padding: const EdgeInsetsGeometry.symmetric(vertical: 15, horizontal: 5),
+          child: Container(
+            padding: EdgeInsetsGeometry.all(15),
+            decoration: BoxDecoration(
+              color: theme.surfaceContainer,
+              borderRadius: BorderRadius.circular(20),
             ),
-          ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                spacing: 10,
+                children: [
+                  _buildName(),
+                  _buildValue(),
+                  _buildProperty(),
+                  _buildDeadlinePicker(),
+                  const SizedBox(height: 20),
+                  _buildButtons(),
+                ],
+              ),
+            ),
+          )
         ),
       ),
     );
@@ -98,32 +123,26 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
   }
 
   Widget _buildProperty() {
-    return TextFormField(
-      controller: _propertyController,
-      decoration: const InputDecoration(labelText: 'Property ID'),
-    );
-  }
-
-  Widget _buildDatePicker() {
-    return ListTile(
-      title: Text(
-        _date == null
-            ? 'Selecionar data'
-            : 'Data: ${_dateFormat.format(_date!)}',
-      ),
-      trailing: const Icon(Icons.calendar_today),
-      onTap: () async {
-        final picked = await showDatePicker(
-          context: context,
-          initialDate: _date ?? DateTime.now(),
-          firstDate: DateTime(2020),
-          lastDate: DateTime(2100),
-        );
-
-        if (picked != null) {
-          setState(() => _date = picked);
-        }
+    if (properties == null) {
+      return const CircularProgressIndicator();
+    }
+    return DropdownMenu(
+      width: double.infinity,
+      initialSelection: widget.expense != null
+          ? _propertyId
+          : null,
+      onSelected: (value) {
+        _propertyId = value!;
       },
+      menuStyle: MenuStyle(
+        padding: WidgetStateProperty.all(const EdgeInsets.all(15)),
+      ),
+      dropdownMenuEntries: properties!.map((property) {
+        return DropdownMenuEntry(
+          value: property.id,
+          label: property.name,
+        );
+      }).toList(),
     );
   }
 
@@ -150,36 +169,6 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
     );
   }
 
-  Widget _buildExpensesType() {
-    return DropdownButtonFormField<int>(
-      value: _expensesTypeId,
-      items: [
-        DropdownMenuItem(
-          value: 0,
-          child: Row(
-            spacing: 5,
-            children: [
-              Icon(Icons.add_circle_outline, color: Theme.of(context).colorScheme.primary),
-              Text('Cadastrar novo', style: TextStyle(color: Theme.of(context).colorScheme.primary),)
-            ],
-          ),
-        ),
-      ],
-      onChanged: (value) {
-        if (value == 0) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ExpensesTypeForm(),
-            ),
-          );
-          return;
-        }
-
-        setState(() => _expensesTypeId = value);
-      },
-    );
-  }
-
   Widget _buildButtons() {
     return SizedBox(
       width: double.infinity,
@@ -191,7 +180,7 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
             onPressed: () {
               _delete(widget.expense!.id);
             },
-            icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error)
+            icon: Icon(Icons.delete, color: theme.error)
           ) : const SizedBox(),
           FilledButton(
             onPressed: _save,
@@ -207,13 +196,13 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
 
     final expense = widget.expense ?? ExpensesModel();
 
+
     expense
       ..name = _nameController.text
       ..value = double.tryParse(_valueController.text) ?? 0
-      ..propertyId = _propertyController.text
-      ..date = _date ?? DateTime.now()
-      ..deadline = _deadline ?? DateTime.now()
-      ..expensesTypeId = _expensesTypeId ?? 1;
+      ..propertyId = _propertyId
+      ..date = widget.expense != null ? widget.expense!.date : DateTime.now()
+      ..deadline = _deadline ?? DateTime.now();
 
     await _repo.save(expense);
 
@@ -237,16 +226,20 @@ class _ExpensesFormPageState extends State<ExpensesFormPage> {
   }
 
   Future<void> _init() async{
-    _expensesTypes = await _expensesTypeRepo.getAll();
+    _date = DateTime.now();
+    final props = await _repoProperties.getAll();
+
+    setState(() {
+      properties = props;
+    });
 
     if (widget.expense != null) {
       _nameController.text = widget.expense!.name;
       _valueController.text = widget.expense!.value.toString();
-      _propertyController.text = widget.expense!.propertyId;
+      _propertyId = widget.expense!.propertyId;
 
       _date = widget.expense!.date;
       _deadline = widget.expense!.deadline;
-      _expensesTypeId = widget.expense!.expensesTypeId;
     }
   }
 }

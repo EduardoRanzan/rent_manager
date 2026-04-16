@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rent_manager/models/expenses/expenses_model.dart';
+import 'package:rent_manager/models/properties/properties_model.dart';
 import 'package:rent_manager/views/expenses/expenses_form_page.dart';
 
 class ExpensesItemPage extends StatelessWidget {
@@ -8,6 +9,7 @@ class ExpensesItemPage extends StatelessWidget {
   final ThemeData theme;
   final NumberFormat currency;
   final VoidCallback onUpdate;
+  final List<PropertiesModel> properties;
 
   const ExpensesItemPage({
     super.key,
@@ -15,27 +17,47 @@ class ExpensesItemPage extends StatelessWidget {
     required this.theme,
     required this.currency,
     required this.onUpdate,
+    required this.properties,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
-      color: theme.colorScheme.surface,
+      color: theme.colorScheme.primaryContainer,
       elevation: 0,
       child: ListTile(
-        contentPadding: const EdgeInsets.all(12),
+        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
 
         leading: CircleAvatar(
           backgroundColor: theme.colorScheme.surface,
           child: const Icon(Icons.attach_money),
         ),
 
-        title: Text(
-          expense.name,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+        title: Row(
+          children: [
+            Text(
+              '${expense.id.toString()} - ${expense.name}',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  properties.firstWhere((property) => property.id == expense.propertyId).name,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSecondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+            )
+          ]
         ),
 
         subtitle: Column(

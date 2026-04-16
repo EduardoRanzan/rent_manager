@@ -8,7 +8,7 @@ class ExpensesModel {
 
   late String name;
 
-  late int expensesTypeId;
+  int? expensesTypeId;
 
   late double value;
 
@@ -16,5 +16,5 @@ class ExpensesModel {
 
   late DateTime deadline;
 
-  late String propertyId;
+  late int propertyId;
 }
