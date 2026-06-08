@@ -28,6 +28,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   List<ExpensesModel> expenses = [];
   List<PropertiesModel> properties = [];
+  double valueExpenses = 0;
+  double valueProperties = 0;
+
 
   @override
   void initState() {
@@ -65,13 +68,13 @@ class _DashboardPageState extends State<DashboardPage> {
             _financeItem(
               theme,
               'A receber',
-              'R\$ 5.000',
+              valueProperties.toString(),
               theme.colorScheme.tertiary,
             ),
             _financeItem(
               theme,
               'A Pagar',
-              'R\$ 12.000',
+              valueExpenses.toString(),
               theme.colorScheme.primary,
             ),
           ],
@@ -97,7 +100,7 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         const SizedBox(height: 8),
         Text(
-          value,
+          'R\$ $value',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -186,9 +189,14 @@ class _DashboardPageState extends State<DashboardPage> {
     final expensesData = await _repoExpenses.getAll();
     final propertiesData = await _repoProperties.getAll();
 
+    final valueExpenses = expensesData.fold(0.00, (previousValue, element) => previousValue + element.value);
+    final valueProperties = propertiesData.fold(0.00, (previousValue, element) => previousValue + element.rentPrice);
+
     setState(() {
       expenses = expensesData;
       properties = propertiesData;
+      this.valueExpenses = valueExpenses;
+      this.valueProperties = valueProperties;
     });
   }
 }

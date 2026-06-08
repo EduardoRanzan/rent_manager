@@ -91,7 +91,7 @@ class PropertiesItemPage extends StatelessWidget {
     );
 
     if (result == true) {
-      onUpdate;
+      onUpdate();
     }
   }
 }
