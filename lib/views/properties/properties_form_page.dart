@@ -515,6 +515,11 @@ class _PropertiesFormPageState extends State<PropertiesFormPage> {
   void _showMessage(String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+      ..showSnackBar(SnackBar(
+        content: Text(message),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+      ));
   }
 }
