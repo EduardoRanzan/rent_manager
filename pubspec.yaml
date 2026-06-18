@@ -19,6 +19,8 @@ dependencies:
   flutter_multi_formatter: ^2.12.0
   http: ^1.2.2
   json_annotation: ^4.9.0
+  geolocator: ^14.0.3
+  geocoding: ^4.0.0
 
 dev_dependencies:
   flutter_test:

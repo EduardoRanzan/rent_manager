@@ -3,6 +3,7 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:rent_manager/database/repositories/properties/properties_repository.dart';
 import 'package:rent_manager/models/properties/properties_model.dart';
 import 'package:rent_manager/services/cep_service.dart';
+import 'package:rent_manager/services/location_service.dart';
 
 class PropertiesFormPage extends StatefulWidget {
   final PropertiesModel? property;
@@ -29,10 +30,14 @@ class _PropertiesFormPageState extends State<PropertiesFormPage> {
 
   bool? _isRented;
   bool _isSearchingCep = false;
+  bool _isGettingLocation = false;
   String? _lastSearchedCep;
+  double? _latitude;
+  double? _longitude;
 
   final _repo = PropertiesRepository();
   final _cepService = CepService();
+  final _locationService = LocationService();
 
   @override
   void initState() {
@@ -52,6 +57,8 @@ class _PropertiesFormPageState extends State<PropertiesFormPage> {
       _cityController.text = e.city ?? '';
       _stateController.text = e.state ?? '';
       _isRented = e.isRented;
+      _latitude = e.latitude;
+      _longitude = e.longitude;
     }
   }
 
@@ -118,6 +125,8 @@ class _PropertiesFormPageState extends State<PropertiesFormPage> {
                       Expanded(child: _buildState()),
                     ],
                   ),
+                  const SizedBox(height: 6),
+                  _buildLocation(),
                   const SizedBox(height: 10),
                   _buildButtons(),
                 ],
@@ -247,6 +256,45 @@ class _PropertiesFormPageState extends State<PropertiesFormPage> {
   String? _requiredAddressField(String? value) =>
       value == null || value.trim().isEmpty ? 'Obrigatório' : null;
 
+  Widget _buildLocation() {
+    final hasLocation = _latitude != null &&
+        _longitude != null &&
+        !(_latitude == 0 && _longitude == 0);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        OutlinedButton.icon(
+          onPressed: _isGettingLocation ? null : _getCurrentLocation,
+          icon: _isGettingLocation
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.my_location),
+          label: Text(
+            _isGettingLocation
+                ? 'Obtendo localização...'
+                : hasLocation
+                    ? 'Atualizar localização'
+                    : 'Usar localização atual',
+          ),
+        ),
+        if (hasLocation)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              'Coordenadas: ${_latitude!.toStringAsFixed(6)}, '
+              '${_longitude!.toStringAsFixed(6)}',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+      ],
+    );
+  }
+
   Widget _buildButtons() {
     return SizedBox(
         width: double.infinity,
@@ -290,8 +338,8 @@ class _PropertiesFormPageState extends State<PropertiesFormPage> {
       ..city = _cityController.text.trim()
       ..state = _stateController.text.trim().toUpperCase()
       ..rentPrice = rentPrice
-      ..latitude = 0
-      ..longitude = 0
+      ..latitude = _latitude
+      ..longitude = _longitude
       ..propertiesTypeId = 0
       ..isRented = _isRented ?? true;
 
@@ -348,6 +396,120 @@ class _PropertiesFormPageState extends State<PropertiesFormPage> {
     } finally {
       if (mounted) setState(() => _isSearchingCep = false);
     }
+  }
+
+  Future<void> _getCurrentLocation() async {
+    if (_isGettingLocation) return;
+
+    setState(() => _isGettingLocation = true);
+
+    try {
+      final location = await _locationService.getCurrentLocation();
+      if (!mounted) return;
+
+      setState(() {
+        _latitude = location.position.latitude;
+        _longitude = location.position.longitude;
+        _fillAddressFromLocation(location);
+      });
+      _showMessage(
+        location.placemark == null
+            ? 'Coordenadas capturadas, mas o endereço não foi encontrado.'
+            : 'Localização e endereço preenchidos com sucesso.',
+      );
+    } on LocationServiceException catch (error) {
+      if (mounted) _showMessage(error.message);
+    } catch (_) {
+      if (mounted) {
+        _showMessage('Não foi possível obter a localização agora.');
+      }
+    } finally {
+      if (mounted) setState(() => _isGettingLocation = false);
+    }
+  }
+
+  void _fillAddressFromLocation(CapturedLocation location) {
+    final place = location.placemark;
+    if (place == null) return;
+
+    final cep = _formatCep(place.postalCode);
+    _setControllerText(_cepController, cep);
+    _setControllerText(
+      _streetController,
+      _firstNotEmpty([place.thoroughfare, place.street]),
+    );
+    _setControllerText(_numberController, place.subThoroughfare);
+    _setControllerText(
+      _neighborhoodController,
+      _firstNotEmpty([place.subLocality, place.subAdministrativeArea]),
+    );
+    _setControllerText(
+      _cityController,
+      _firstNotEmpty([place.locality, place.subAdministrativeArea]),
+    );
+    _setControllerText(_stateController, _stateToUf(place.administrativeArea));
+
+    final normalizedCep = cep.replaceAll(RegExp(r'\D'), '');
+    if (normalizedCep.length == 8) _lastSearchedCep = normalizedCep;
+  }
+
+  void _setControllerText(TextEditingController controller, String? value) {
+    if (value != null && value.trim().isNotEmpty) {
+      controller.text = value.trim();
+    }
+  }
+
+  String _firstNotEmpty(List<String?> values) {
+    return values.firstWhere(
+          (value) => value != null && value.trim().isNotEmpty,
+          orElse: () => '',
+        ) ??
+        '';
+  }
+
+  String _formatCep(String? value) {
+    final digits = value?.replaceAll(RegExp(r'\D'), '') ?? '';
+    if (digits.length != 8) return value ?? '';
+    return '${digits.substring(0, 5)}-${digits.substring(5)}';
+  }
+
+  String? _stateToUf(String? state) {
+    if (state == null || state.trim().isEmpty) return null;
+
+    final normalized = state.trim().toLowerCase();
+    if (normalized.length == 2) return normalized.toUpperCase();
+
+    const states = {
+      'acre': 'AC',
+      'alagoas': 'AL',
+      'amapá': 'AP',
+      'amazonas': 'AM',
+      'bahia': 'BA',
+      'ceará': 'CE',
+      'distrito federal': 'DF',
+      'espírito santo': 'ES',
+      'goiás': 'GO',
+      'maranhão': 'MA',
+      'mato grosso': 'MT',
+      'mato grosso do sul': 'MS',
+      'minas gerais': 'MG',
+      'pará': 'PA',
+      'paraíba': 'PB',
+      'paraná': 'PR',
+      'pernambuco': 'PE',
+      'piauí': 'PI',
+      'rio de janeiro': 'RJ',
+      'rio grande do norte': 'RN',
+      'rio grande do sul': 'RS',
+      'rondônia': 'RO',
+      'roraima': 'RR',
+      'santa catarina': 'SC',
+      'são paulo': 'SP',
+      'sergipe': 'SE',
+      'tocantins': 'TO',
+    };
+
+    return states[normalized] ?? state;
   }
 
   void _showMessage(String message) {
