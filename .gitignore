@@ -31,7 +31,8 @@ doc/api/
 .idea/
 *.iml
 
-.fvm
-.fvmrc
-
 *.g.dart
+
+# FVM Version Cache
+.fvm/
+.fvmrc

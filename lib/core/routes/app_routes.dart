@@ -11,14 +11,14 @@ import 'package:rent_manager/views/reports/report_page.dart';
 class AppRoutes {
   static Map<String, Widget Function(BuildContext)> initRoutes() {
     return {
-      '/home': (context) => HomePage(),
-      '/dashboard': (context) => DashboardPage(),
-      '/expenses': (context) => ExpensesPage(),
-      '/properties': (context) => PropertiesPage(),
-      '/report': (context) => ReportPage(),
-      '/profile': (context) => ProfilePage(),
-      '/login': (context) => LoginPage(),
-      '/expenses-type': (context) => ExpensesTypeForm(),
+      HomePage.routeName: (context) => HomePage(),
+      DashboardPage.routeName: (context) => DashboardPage(),
+      ExpensesPage.routeName: (context) => ExpensesPage(),
+      PropertiesPage.routeName: (context) => PropertiesPage(),
+      ReportPage.routeName: (context) => ReportPage(),
+      ProfilePage.routeName: (context) => ProfilePage(),
+      LoginPage.routeName: (context) => LoginPage(),
+      ExpensesTypeForm.routName: (context) => ExpensesTypeForm(),
     };
   }
 }

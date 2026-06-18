@@ -4,6 +4,7 @@ import 'package:rent_manager/models/expenses/expenses_type_model.dart';
 
 class ExpensesTypeForm extends StatefulWidget {
   final ExpensesTypeModel? expenseType;
+  static const String routName = '/expenses-type';
 
   const ExpensesTypeForm({super.key, this.expenseType});
 
