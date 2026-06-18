@@ -18,6 +18,20 @@ class PropertiesModel {
 
   String? description;
 
+  String? cep;
+
+  String? street;
+
+  String? number;
+
+  String? complement;
+
+  String? neighborhood;
+
+  String? city;
+
+  String? state;
+
   List<String>? images;
 
   int? propertiesTypeId;
